@@ -9,10 +9,10 @@ const Gallery = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [featureImageIndex, setFeatureImageIndex] = useState(0);
 
-    // Create a reference to the file input
+    // reference to the file input
     const fileInputRef = useRef(null);
 
-    // Set the first image as the featured image by default
+    // Setting up the first image as the feature image
     useEffect(() => {
         if (images.length > 0) {
             setFeatureImageIndex(0);
@@ -20,7 +20,9 @@ const Gallery = () => {
     }, [images]);
 
     const onDragEnd = (result) => {
-        if (!result.destination) return;
+        if (!result.destination) {
+            return;
+        }
 
         const updatedImages = [...images];
         const [reorderedImage] = updatedImages.splice(result.source.index, 1);
@@ -28,7 +30,7 @@ const Gallery = () => {
 
         setImages(updatedImages);
 
-        // Update the feature image index if it was moved
+        // Updatting the feature image index
         if (result.source.index === featureImageIndex) {
             setFeatureImageIndex(result.destination.index);
         }
@@ -37,7 +39,7 @@ const Gallery = () => {
     const addImage = (event) => {
         const newImages = [...images, URL.createObjectURL(event.target.files[0])];
         setImages(newImages);
-        // Set the newly added image as the featured image
+        // Setting the newly added image as a feature image
         setFeatureImageIndex(newImages.length - 1);
     };
 
@@ -46,7 +48,7 @@ const Gallery = () => {
         setImages(newImages);
         setSelectedImages([]);
 
-        // Check if the feature image is deleted and set the first image as the feature image
+        // Checking if the feature image is deleted and set the first image as the feature image
         if (featureImageIndex >= newImages.length) {
             setFeatureImageIndex(0);
         }
@@ -68,6 +70,7 @@ const Gallery = () => {
 
     return (
         <div className=" bg-white lg:mx-4 lg:my-4 lg:py-24 lg:px-24 px-4 py-4 mx-2 my-2 rounded">
+            {/* Header part */ }
             { selectedImages.length ? (
                 <div className="container">
                     <p className="font-bold text-2xl flex justify-between items-center">
@@ -81,7 +84,7 @@ const Gallery = () => {
                     <h1 className="font-bold text-2xl">Gallery</h1>
                 </div>
             ) }
-
+            {/* Image Dragging and Droping part */ }
             <DragDropContext onDragEnd={ onDragEnd }>
                 <Droppable droppableId="gallery" direction="horizontal">
                     { (provided) => (
@@ -125,8 +128,9 @@ const Gallery = () => {
                 </Droppable>
             </DragDropContext>
 
+            {/* Input field for images */ }
             <div>
-                {/* Custom file input placed here, just after the table */ }
+
                 <label className="custom-file-input" htmlFor="fileInput">
                     <div className="label-text">
                         <BsImageFill></BsImageFill>
